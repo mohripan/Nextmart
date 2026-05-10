@@ -1,0 +1,62 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: nexmart-eks
+  region: ap-southeast-1        # Singapore — closest with full service coverage
+  version: "1.32"
+  tags:
+    project: nexmart-eks-learning
+
+# This is THE most important line for this entire project.
+# It creates an OIDC provider so pods can assume IAM roles (IRSA).
+# Without this, none of your service-level IAM permissions work.
+iam:
+  withOIDC: true
+
+# A small, always-on node group for system workloads only
+# (CoreDNS, Karpenter, Argo CD, etc.)
+# We'll add Karpenter later for application workloads.
+managedNodeGroups:
+  - name: system
+    instanceType: t3.medium
+    minSize: 2
+    maxSize: 2
+    desiredCapacity: 2
+    privateNetworking: true
+    labels:
+      role: system
+    # This taint means only system pods land here.
+    # Your app services will go on Karpenter-managed nodes later.
+    taints:
+      - key: CriticalAddonsOnly
+        value: "true"
+        effect: NoSchedule
+
+# Core add-ons managed by EKS (auto-updated, AWS-supported)
+addons:
+  - name: vpc-cni
+    version: latest
+    resolveConflicts: overwrite
+
+  - name: coredns
+    version: latest
+    resolveConflicts: overwrite
+
+  - name: kube-proxy
+    version: latest
+    resolveConflicts: overwrite
+
+  # This is what enables PVCs to provision EBS volumes.
+  # Without it, your PostgreSQL StatefulSets will stay Pending forever.
+  - name: aws-ebs-csi-driver
+    version: latest
+    resolveConflicts: overwrite
+    wellKnownPolicies:
+      ebsCSIController: true     # eksctl creates + attaches the IAM policy for you
+
+# Explicit VPC config: 3 AZs, private nodes, public load balancers
+vpc:
+  clusterEndpoints:
+    publicAccess: true           # You need this to reach the API server from your laptop
+    privateAccess: true
