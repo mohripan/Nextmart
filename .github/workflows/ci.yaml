@@ -1,0 +1,79 @@
+name: Build and Push to ECR
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/**'
+
+env:
+  AWS_REGION: ap-southeast-1
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-southeast-1.amazonaws.com
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            api-gateway:
+              - 'services/api-gateway/**'
+            product-catalog:
+              - 'services/product-catalog/**'
+            order-service:
+              - 'services/order-service/**'
+            inventory-service:
+              - 'services/inventory-service/**'
+            notification-service:
+              - 'services/notification-service/**'
+            search-service:
+              - 'services/search-service/**'
+
+  build-and-push:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    if: ${{ needs.detect-changes.outputs.services != '[]' }}
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        id: build
+        run: |
+          IMAGE=$ECR_REGISTRY/nexmart/${{ matrix.service }}
+          TAG=${{ github.sha }}
+
+          docker build -t $IMAGE:$TAG -t $IMAGE:latest services/${{ matrix.service }}
+          docker push $IMAGE:$TAG
+          docker push $IMAGE:latest
+
+          echo "image=$IMAGE:$TAG" >> $GITHUB_OUTPUT
+
+      - name: Update image tag in k8s manifests
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          sed -i "s|image: .*nexmart/${{ matrix.service }}:.*|image: ${{ steps.build.outputs.image }}|g" \
+            k8s/base/${{ matrix.service }}/deployment.yaml
+
+          git add k8s/base/${{ matrix.service }}/deployment.yaml
+          git diff --staged --quiet || git commit -m "ci: update ${{ matrix.service }} image to ${{ github.sha }}"
+          git push
