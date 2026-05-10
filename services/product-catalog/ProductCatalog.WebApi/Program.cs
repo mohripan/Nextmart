@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// OpenTelemetry — traces go to ADOT collector (we'll set this up in Phase 7)
+// OpenTelemetry — traces go to ADOT collector (we'll set this up in Phase 7) 
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(r => r.AddService("product-catalog"))
     .WithTracing(tracing => tracing
