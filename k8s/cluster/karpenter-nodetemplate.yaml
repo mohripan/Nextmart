@@ -1,0 +1,13 @@
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: default
+spec:
+  subnetSelector:
+    kubernetes.io/cluster/nexmart-eks: shared
+  securityGroupSelector:
+    kubernetes.io/cluster/nexmart-eks: owned
+  instanceProfile: KarpenterNodeInstanceProfile-nexmart-eks
+  tags:
+    kubernetes.io/cluster/nexmart-eks: owned
+    project: nexmart-eks-learning
