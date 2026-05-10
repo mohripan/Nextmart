@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="ProductCatalog.Infrastructure/ProductCatalog.Infrastructure.csproj" Id="a43bd72d-7dac-4bc0-a341-8db49f07579b" />
   <Project Path="ProductCatalog.Models/ProductCatalog.Models.csproj" Id="d9c8a075-6db3-4201-a489-6a157d2efe31" />
   <Project Path="ProductCatalog.WebApi/ProductCatalog.WebApi.csproj" Id="a3180357-9e4c-4b76-9470-6694712de8e1" />

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="OrderService.Domain/OrderService.Domain.csproj" Id="2546fc20-9998-46d5-9fe9-75d05361ab74" />
+  <Project Path="OrderService.Infrastructure/OrderService.Infrastructure.csproj" Id="1f0366c3-1875-461c-af87-f86e305c7f97" />
+  <Project Path="OrderService.WebApi/OrderService.WebApi.csproj" Id="88771c55-4989-417c-81fc-b03c66ca1794" />
+</Solution>

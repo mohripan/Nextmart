@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="InventoryService.Domain/InventoryService.Domain.csproj" Id="fb6cde66-479c-48b3-bf4f-3f71040d2b72" />
+  <Project Path="InventoryService.Infrastructure/InventoryService.Infrastructure.csproj" Id="4fddd2e0-1fa1-446f-94a1-d8bde18b69b8" />
+  <Project Path="InventoryService.WebApi/InventoryService.WebApi.csproj" Id="04e0b16e-274f-4131-87e6-b161bfbf866e" />
+</Solution>
