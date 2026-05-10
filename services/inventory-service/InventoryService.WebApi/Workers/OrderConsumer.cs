@@ -40,7 +40,7 @@ public class OrderConsumer : BackgroundService
                     WaitTimeSeconds = 20
                 }, stoppingToken);
 
-                foreach (var message in response.Messages)
+                foreach (var message in response.Messages ?? [])
                 {
                     try
                     {
