@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: inventory-service-scaler
+  namespace: inventory-service
+spec:
+  scaleTargetRef:
+    name: inventory-service
+  minReplicaCount: 0
+  maxReplicaCount: 5
+  cooldownPeriod: 30
+  triggers:
+    - type: aws-sqs-queue
+      authenticationRef:
+        name: keda-sqs-auth
+      metadata:
+        queueURL: https://sqs.ap-southeast-1.amazonaws.com/416430293265/nexmart-orders
+        queueLength: "5"
+        awsRegion: ap-southeast-1

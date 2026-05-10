@@ -5,3 +5,5 @@ resources:
   - serviceaccount.yaml
   - deployment.yaml
   - service.yaml
+  - keda-trigger-auth.yaml
+  - scaledobject.yaml
