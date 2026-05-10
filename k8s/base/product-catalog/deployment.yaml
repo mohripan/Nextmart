@@ -20,7 +20,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: product-catalog
-          image: 416430293265.dkr.ecr.ap-southeast-1.amazonaws.com/nexmart/product-catalog:7f2b2886839e4a40a27e54175c1903f12396ff98
+          image: 416430293265.dkr.ecr.ap-southeast-1.amazonaws.com/nexmart/product-catalog:a3ca9f6554a0018bb161e83e6870d635895220d8
           ports:
             - containerPort: 8080
           env:
