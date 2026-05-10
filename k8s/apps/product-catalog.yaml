@@ -7,10 +7,8 @@ spec:
   project: default
   source:
     repoURL: https://github.com/mohripan/Nextmart.git
-    targetRevision: HEAD
+    targetRevision: main
     path: k8s/base/product-catalog
-    plugin:
-      name: kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: product-catalog
