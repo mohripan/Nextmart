@@ -20,7 +20,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: inventory-service
-          image: 416430293265.dkr.ecr.ap-southeast-1.amazonaws.com/nexmart/inventory-service:3bbfbe75e3e1d0deb999bd05cc9c550466c9366b
+          image: 416430293265.dkr.ecr.ap-southeast-1.amazonaws.com/nexmart/inventory-service:9b56aabfff0278870481e2436b83f24cd99d7437
           ports:
             - containerPort: 8080
           env:
