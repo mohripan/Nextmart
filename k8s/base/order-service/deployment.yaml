@@ -20,7 +20,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: order-service
-          image: 416430293265.dkr.ecr.ap-southeast-1.amazonaws.com/nexmart/order-service:a3ca9f6554a0018bb161e83e6870d635895220d8
+          image: 416430293265.dkr.ecr.ap-southeast-1.amazonaws.com/nexmart/order-service:3bbfbe75e3e1d0deb999bd05cc9c550466c9366b
           ports:
             - containerPort: 8080
           env:
